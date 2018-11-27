@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html class="full" lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+	<head>
+		<link type="text/css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+		<link type="text/css" th:href="@{/css/slate-theme.css}" rel="stylesheet"/>
+		<link type="text/css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+		
+		<script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Admin Dashboard</h1>
+			<p th:if="${success != null}" th:text="${success}"></p>
+			<p th:if="${jwt != null}" th:text="${'Your JWT Token: ' + jwt}"></p>
+			<form action="#" th:action="@{/}" th:object="${newUser}" method="post">
+				<input placeholder="Username" class="form-control" type="text" th:field="*{username}" />
+				<input placeholder="Password" class="form-control" type="text" th:field="*{password}" />
+				<input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" />
+			</form>
+		</div>
+	</body>
+</html>

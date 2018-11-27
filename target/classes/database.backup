@@ -1,0 +1,434 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
+
+-- Started on 2018-10-26 03:46:31
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 1 (class 3079 OID 12355)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 3556 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- TOC entry 2 (class 3079 OID 57535)
+-- Name: postgis; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
+
+
+--
+-- TOC entry 3557 (class 0 OID 0)
+-- Dependencies: 2
+-- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 183 (class 1259 OID 57452)
+-- Name: food_unit_attributes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE food_unit_attributes (
+    attributes_id character varying(36) NOT NULL,
+    food_unit_id character varying(36) NOT NULL,
+    name character varying(100),
+    value character varying(1000)
+);
+
+
+ALTER TABLE food_unit_attributes OWNER TO postgres;
+
+--
+-- TOC entry 184 (class 1259 OID 57460)
+-- Name: food_unit_tracking; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE food_unit_tracking (
+    tracking_id character varying(36) NOT NULL,
+    food_unit_id character varying(36) NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT now() NOT NULL,
+    lat double precision,
+    lng double precision
+);
+
+
+ALTER TABLE food_unit_tracking OWNER TO postgres;
+
+--
+-- TOC entry 182 (class 1259 OID 57443)
+-- Name: food_units; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE food_units (
+    food_unit_id character varying(36) NOT NULL,
+    user_id character varying(36) NOT NULL,
+    product_type_id character varying(36) NOT NULL,
+    unit_desc character varying(1000) NOT NULL,
+    created timestamp with time zone DEFAULT now() NOT NULL,
+    mass double precision NOT NULL,
+    expiry date NOT NULL
+);
+
+
+ALTER TABLE food_units OWNER TO postgres;
+
+--
+-- TOC entry 186 (class 1259 OID 57471)
+-- Name: product_type_required_attributes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE product_type_required_attributes (
+    required_attributes_id character varying(36) NOT NULL,
+    product_type_id character varying(36) NOT NULL,
+    name character varying(100),
+    value character varying(1000)
+);
+
+
+ALTER TABLE product_type_required_attributes OWNER TO postgres;
+
+--
+-- TOC entry 185 (class 1259 OID 57466)
+-- Name: product_types; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE product_types (
+    product_type_id character varying(36) NOT NULL,
+    product_type character varying(200) NOT NULL
+);
+
+
+ALTER TABLE product_types OWNER TO postgres;
+
+--
+-- TOC entry 188 (class 1259 OID 57489)
+-- Name: user_authorities; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE user_authorities (
+    authority_id character varying(36) NOT NULL,
+    user_id character varying(36) NOT NULL,
+    authority character varying(64) NOT NULL
+);
+
+
+ALTER TABLE user_authorities OWNER TO postgres;
+
+--
+-- TOC entry 187 (class 1259 OID 57479)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE users (
+    user_id character varying(36) NOT NULL,
+    username character varying(64) NOT NULL,
+    password character varying(60) NOT NULL,
+    email character varying(128) NOT NULL,
+    created timestamp with time zone DEFAULT now() NOT NULL,
+    enabled boolean DEFAULT true NOT NULL,
+    account_non_expired boolean DEFAULT true NOT NULL,
+    account_non_locked boolean DEFAULT true NOT NULL,
+    credentials_non_expired boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE users OWNER TO postgres;
+
+--
+-- TOC entry 3543 (class 0 OID 57452)
+-- Dependencies: 183
+-- Data for Name: food_unit_attributes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO food_unit_attributes (attributes_id, food_unit_id, name, value) VALUES ('4444d1f-f29f-4ec5-b7e9-64567d8f3d7c', '0009d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'cupping', '98/100');
+INSERT INTO food_unit_attributes (attributes_id, food_unit_id, name, value) VALUES ('c19648e9-cdf9-48f4-ac53-027a319c3fbf', '5e982fc6-49ac-47b9-b6b1-07f65d277ee8', 'cupping', '10');
+
+
+--
+-- TOC entry 3544 (class 0 OID 57460)
+-- Dependencies: 184
+-- Data for Name: food_unit_tracking; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO food_unit_tracking (tracking_id, food_unit_id, "timestamp", lat, lng) VALUES ('05323fc6-49ac-47b9-b6b1-07f65d277ee8', '5e982fc6-49ac-47b9-b6b1-07f65d277ee8', '2018-10-25 23:41:22.1477-05', 100, 50.200000000000003);
+
+
+--
+-- TOC entry 3542 (class 0 OID 57443)
+-- Dependencies: 182
+-- Data for Name: food_units; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO food_units (food_unit_id, user_id, product_type_id, unit_desc, created, mass, expiry) VALUES ('0009d1f-f29f-4ec5-b7e9-64567d8f3d7c', '9f139d1f-f29f-4ec5-b7e9-64567d8f3d7c', '1119d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'Gourmet Dark Roast Coffee', '2018-10-24 00:34:48.974429-05', 1.2, '2018-12-22');
+INSERT INTO food_units (food_unit_id, user_id, product_type_id, unit_desc, created, mass, expiry) VALUES ('5e982fc6-49ac-47b9-b6b1-07f65d277ee8', '9f139d1f-f29f-4ec5-b7e9-64567d8f3d7c', '1119d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'Sketchy Coffee', '2018-10-25 16:10:57.345-05', 2, '2018-12-29');
+
+
+--
+-- TOC entry 3546 (class 0 OID 57471)
+-- Dependencies: 186
+-- Data for Name: product_type_required_attributes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO product_type_required_attributes (required_attributes_id, product_type_id, name, value) VALUES ('0019d1f-f29f-4ec5-b7e9-64567d8f3d7c', '1119d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'cupping', '1-100');
+INSERT INTO product_type_required_attributes (required_attributes_id, product_type_id, name, value) VALUES ('0109d1f-f29f-4ec5-b7e9-64567d8f3d7c', '2229d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'percent', '0-100');
+INSERT INTO product_type_required_attributes (required_attributes_id, product_type_id, name, value) VALUES ('0119d1f-f29f-4ec5-b7e9-64567d8f3d7c', '3339d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'caffeine', 'mg');
+
+
+--
+-- TOC entry 3545 (class 0 OID 57466)
+-- Dependencies: 185
+-- Data for Name: product_types; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO product_types (product_type_id, product_type) VALUES ('1119d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'Coffee');
+INSERT INTO product_types (product_type_id, product_type) VALUES ('2229d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'Milk');
+INSERT INTO product_types (product_type_id, product_type) VALUES ('3339d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'Soda');
+INSERT INTO product_types (product_type_id, product_type) VALUES ('efb4088f-8724-4de6-a625-9be9f55ff047', 'fake');
+INSERT INTO product_types (product_type_id, product_type) VALUES ('84645998-6e1c-4cd3-b4d7-34c25c8d8f5f', 'fake');
+INSERT INTO product_types (product_type_id, product_type) VALUES ('74d0ef54-de93-459a-bc12-c5e3bbdd48b8', 'fake');
+INSERT INTO product_types (product_type_id, product_type) VALUES ('ba894655-e013-4b10-96cf-c2778cc1e5ec', 'fake');
+INSERT INTO product_types (product_type_id, product_type) VALUES ('387d3190-7a9a-4116-8508-3661c621672d', 'fake');
+INSERT INTO product_types (product_type_id, product_type) VALUES ('c402b079-c223-4cd8-9582-de51e287c9ca', 'fake');
+
+
+--
+-- TOC entry 3387 (class 0 OID 57832)
+-- Dependencies: 190
+-- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3548 (class 0 OID 57489)
+-- Dependencies: 188
+-- Data for Name: user_authorities; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO user_authorities (authority_id, user_id, authority) VALUES ('9f139d1f-f29f-4ec5-b7e9-64567d8f4444', '9f139d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'ROLE_ADMIN');
+
+
+--
+-- TOC entry 3547 (class 0 OID 57479)
+-- Dependencies: 187
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO users (user_id, username, password, email, created, enabled, account_non_expired, account_non_locked, credentials_non_expired) VALUES ('9f139d1f-f29f-4ec5-b7e9-64567d8f3d7c', 'seth', '$2y$12$sIxD8SqKR4g1lRtiB7YvvOTPlOQEp7IlREsx5Fk/ko4Km8mknnVvK', 'email@email.mail', '2018-10-22 00:41:30.885577-05', true, true, true, true);
+
+
+--
+-- TOC entry 3401 (class 2606 OID 57459)
+-- Name: food_unit_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY food_unit_attributes
+    ADD CONSTRAINT food_unit_attributes_pkey PRIMARY KEY (attributes_id);
+
+
+--
+-- TOC entry 3398 (class 2606 OID 57451)
+-- Name: food_units_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY food_units
+    ADD CONSTRAINT food_units_pkey PRIMARY KEY (food_unit_id);
+
+
+--
+-- TOC entry 3406 (class 2606 OID 57470)
+-- Name: product_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY product_types
+    ADD CONSTRAINT product_type_pkey PRIMARY KEY (product_type_id);
+
+
+--
+-- TOC entry 3409 (class 2606 OID 57478)
+-- Name: product_type_required_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY product_type_required_attributes
+    ADD CONSTRAINT product_type_required_attributes_pkey PRIMARY KEY (required_attributes_id);
+
+
+--
+-- TOC entry 3404 (class 2606 OID 57465)
+-- Name: tracking_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY food_unit_tracking
+    ADD CONSTRAINT tracking_pkey PRIMARY KEY (tracking_id);
+
+
+--
+-- TOC entry 3414 (class 2606 OID 57493)
+-- Name: user_authorities_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY user_authorities
+    ADD CONSTRAINT user_authorities_pkey PRIMARY KEY (authority_id);
+
+
+--
+-- TOC entry 3411 (class 2606 OID 57488)
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 3399 (class 1259 OID 57499)
+-- Name: fki_food_unit_id_fkey; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_food_unit_id_fkey ON food_unit_attributes USING btree (food_unit_id);
+
+
+--
+-- TOC entry 3395 (class 1259 OID 57522)
+-- Name: fki_product_type_food_unit_fkey; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_product_type_food_unit_fkey ON food_units USING btree (product_type_id);
+
+
+--
+-- TOC entry 3407 (class 1259 OID 57528)
+-- Name: fki_product_type_id_required_fkey; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_product_type_id_required_fkey ON product_type_required_attributes USING btree (product_type_id);
+
+
+--
+-- TOC entry 3402 (class 1259 OID 57510)
+-- Name: fki_tracking_food_unit_id_fkey; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_tracking_food_unit_id_fkey ON food_unit_tracking USING btree (food_unit_id);
+
+
+--
+-- TOC entry 3396 (class 1259 OID 57516)
+-- Name: fki_user_food_unit_fkey; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_user_food_unit_fkey ON food_units USING btree (user_id);
+
+
+--
+-- TOC entry 3412 (class 1259 OID 57534)
+-- Name: fki_users_user_authorities_fkey; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_users_user_authorities_fkey ON user_authorities USING btree (user_id);
+
+
+--
+-- TOC entry 3417 (class 2606 OID 57494)
+-- Name: food_unit_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY food_unit_attributes
+    ADD CONSTRAINT food_unit_id_fkey FOREIGN KEY (food_unit_id) REFERENCES food_units(food_unit_id);
+
+
+--
+-- TOC entry 3416 (class 2606 OID 57517)
+-- Name: product_type_food_unit_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY food_units
+    ADD CONSTRAINT product_type_food_unit_fkey FOREIGN KEY (product_type_id) REFERENCES product_types(product_type_id);
+
+
+--
+-- TOC entry 3419 (class 2606 OID 57523)
+-- Name: product_type_id_required_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY product_type_required_attributes
+    ADD CONSTRAINT product_type_id_required_fkey FOREIGN KEY (product_type_id) REFERENCES product_types(product_type_id);
+
+
+--
+-- TOC entry 3418 (class 2606 OID 57505)
+-- Name: tracking_food_unit_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY food_unit_tracking
+    ADD CONSTRAINT tracking_food_unit_id_fkey FOREIGN KEY (food_unit_id) REFERENCES food_units(food_unit_id);
+
+
+--
+-- TOC entry 3415 (class 2606 OID 57511)
+-- Name: user_food_unit_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY food_units
+    ADD CONSTRAINT user_food_unit_fkey FOREIGN KEY (user_id) REFERENCES users(user_id);
+
+
+--
+-- TOC entry 3420 (class 2606 OID 57529)
+-- Name: users_user_authorities_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY user_authorities
+    ADD CONSTRAINT users_user_authorities_fkey FOREIGN KEY (user_id) REFERENCES users(user_id);
+
+
+--
+-- TOC entry 3555 (class 0 OID 0)
+-- Dependencies: 7
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2018-10-26 03:46:31
+
+--
+-- PostgreSQL database dump complete
+--
+

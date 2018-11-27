@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html class="full" lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+	<head>
+		<link type="text/css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+		<link type="text/css" th:href="@{/css/slate-theme.css}" rel="stylesheet"/>
+		<link type="text/css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+		
+		<script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+	</head>
+	<body>		
+	    <!-- Page Content -->
+	    <div class="container">
+	        <div class="row">
+	        	<div style="text-align: center; margin-top:110px;" class="jumbotron col-sm-12">
+	            	<div class="col-sm-12 col-md-6 col-md-offset-3">
+	            		<h1>Login</h1>
+	            		<h3>(only username matters)</h3>
+		            	<form th:action="@{/login}" method="post">
+		            		<div th:if="${session[SPRING_SECURITY_LAST_EXCEPTION] != null}" class="alert alert-danger">
+							  <strong>Invalid username/password!</strong> Please try again.
+							</div>
+		            		<input placeholder="Username" class="form-control" type="text" name="username"/>
+		            		<br/>
+		            		<input placeholder="Password" class="form-control" type="password" name="password"/>
+		            		<br/>
+		            		<input class="btn btn-lg btn-primary btn-block" type="submit" value="Login"/>
+		            		<p style="margin-top: 25px; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif";>
+		            			<a href="#"><span class="glyphicon glyphicon-pencil"/><span style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">Register</a>
+		            		</p>
+		            		<p style="margin-top: 25px; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif";>
+		            			<a href="#"><span class="glyphicon glyphicon-envelope"/><span style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">Forgot Password?</a>
+		            		</p>
+		            	</form>
+		            </div>
+				</div>
+	        </div>
+	    </div>
+	</body>
+</html>
